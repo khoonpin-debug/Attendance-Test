@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Generate Your Attendance QR</title>
+</head>
+<body>
+
+<h2>Generate Your Daily Attendance QR</h2>
+
+<label>Employee ID:</label>
+<input type="text" id="empid" placeholder="Enter your Employee ID"><br><br>
+
+<label>Factory Site ID:</label>
+<input type="text" id="siteid" placeholder="Enter Site ID"><br><br>
+
+<button onclick="generateQR()">Generate QR</button>
+
+<p id="msg"></p>
+<div id="qr"></div>
+
+<!-- QRious library for QR generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
+<script>
+function generateQR() {
+  var empid = document.getElementById("empid").value.trim();
+  var siteid = document.getElementById("siteid").value.trim();
+
+  if(empid=="" || siteid==""){
+    document.getElementById("msg").innerText = "Please enter both Employee ID and Site ID";
+    return;
+  }
+
+  // Timestamp for uniqueness
+  var timestamp = new Date().getTime();
+
+  // URL for check-in page
+  var qrUrl = "https://yourdomain.com/checkin.html?id=" + empid + "&site=" + siteid + "&ts=" + timestamp;
+
+  // Generate QR code
+  new QRious({
+    element: document.getElementById('qr'),
+    value: qrUrl,
+    size: 250
+  });
+
+  document.getElementById("msg").innerHTML = "Scan this QR code at the site to check in";
+}
+</script>
+
+</body>
+</html>

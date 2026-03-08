@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Factory Attendance Check-In</h2>
+<p id="msg">Checking location...</p>
+
+<script>
+let empid = new URLSearchParams(window.location.search).get("id");
+let siteid = new URLSearchParams(window.location.search).get("site");
+
+// Automatically capture GPS
+navigator.geolocation.getCurrentPosition(function(pos){
+  let lat = pos.coords.latitude;
+  let lon = pos.coords.longitude;
+
+  // Replace XXXXXXXXX with your Apps Script Web App URL
+  let url = "https://script.google.com/macros/s/AKfycbyg7DNkWiIq7DBuZ2EONKP8t_e6IHyevvjtzDPMShnbNy0bul7l9BmAo9GlGA0geb1TqA/exec?id=" + empid +
+            "&site=" + siteid +
+            "&lat=" + lat +
+            "&lon=" + lon;
+
+  fetch(url)
+    .then(r => r.text())
+    .then(data => {
+      document.getElementById("msg").innerHTML = data;
+    });
+
+}, function(error){
+    document.getElementById("msg").innerHTML = "Error: Please allow location access";
+});
+</script>
+
+</body>
+</html>
