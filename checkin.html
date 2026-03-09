@@ -1,34 +1,81 @@
 <!DOCTYPE html>
 <html>
+<head>
+<title>Factory Attendance</title>
+</head>
+
 <body>
 
-<h2>Factory Attendance Check-In</h2>
-<p id="msg">Checking location...</p>
+<h2>Worker Check-In</h2>
+
+<p id="factory"></p>
+
+<label>Employee ID</label>
+<input type="text" id="empid">
+
+<br><br>
+
+<button onclick="checkin()">Check In</button>
+
+<p id="msg"></p>
 
 <script>
-let empid = new URLSearchParams(window.location.search).get("id");
-let siteid = new URLSearchParams(window.location.search).get("site");
 
-// Automatically capture GPS
-navigator.geolocation.getCurrentPosition(function(pos){
-  let lat = pos.coords.latitude;
-  let lon = pos.coords.longitude;
+function getSite(){
 
-  // Replace XXXXXXXXX with your Apps Script Web App URL
-  let url = "https://script.google.com/macros/s/AKfycbyg7DNkWiIq7DBuZ2EONKP8t_e6IHyevvjtzDPMShnbNy0bul7l9BmAo9GlGA0geb1TqA/exec?id=" + empid +
-            "&site=" + siteid +
-            "&lat=" + lat +
-            "&lon=" + lon;
+var url = new URL(window.location.href);
+return url.searchParams.get("site");
 
-  fetch(url)
-    .then(r => r.text())
-    .then(data => {
-      document.getElementById("msg").innerHTML = data;
-    });
+}
 
-}, function(error){
-    document.getElementById("msg").innerHTML = "Error: Please allow location access";
+document.getElementById("factory").innerHTML =
+"Factory: " + getSite();
+
+
+function checkin(){
+
+var empid = document.getElementById("empid").value;
+var site = getSite();
+
+if(empid==""){
+alert("Please enter Employee ID");
+return;
+}
+
+navigator.geolocation.getCurrentPosition(function(position){
+
+var lat = position.coords.latitude;
+var lon = position.coords.longitude;
+
+document.getElementById("msg").innerHTML =
+"Checking in...";
+
+fetch("https://script.google.com/macros/s/AKfycbxrS_rxaFC9n3rxL7AoQRqlKcU2_MqGMZfWD-x5gwNNx4oS6yyydR-StJUB_eCWtpnVzA/exec",{
+
+method:"POST",
+
+body: JSON.stringify({
+
+empid:empid,
+site:site,
+lat:lat,
+lon:lon
+
+})
+
+})
+.then(res=>res.text())
+.then(data=>{
+
+document.getElementById("msg").innerHTML =
+"Attendance recorded successfully";
+
 });
+
+});
+
+}
+
 </script>
 
 </body>
