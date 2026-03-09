@@ -1,63 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Generate Your Attendance QR</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-  <style>
-    #qr {
-      margin-top: 20px;
-    }
-  </style>
+<title>Factory QR Generator</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
 </head>
+
 <body>
 
-<h2>Generate Your Daily Attendance QR</h2>
+<h2>Factory QR Code Generator</h2>
 
-<label>Employee ID:</label>
-<input type="text" id="empid" placeholder="Enter your Employee ID"><br><br>
+<label>Factory Site ID</label>
+<input type="text" id="site" placeholder="Example: PENANG">
 
-<label>Factory Site ID:</label>
-<input type="text" id="siteid" placeholder="Enter Site ID"><br><br>
+<br><br>
 
 <button onclick="generateQR()">Generate QR</button>
 
-<p id="msg"></p>
+<br><br>
+
 <canvas id="qr"></canvas>
 
+<p id="link"></p>
+
 <script>
-function generateQR() {
-  var empid = document.getElementById("empid").value.trim();
-  var siteid = document.getElementById("siteid").value.trim();
 
-  if(empid === "" || siteid === "") {
-    document.getElementById("msg").innerText = "Please enter both Employee ID and Site ID";
-    return;
-  }
+function generateQR(){
 
-  // Timestamp to make each QR unique
-  var timestamp = new Date().getTime();
+var site = document.getElementById("site").value;
 
-  // Replace this with your GitHub Pages checkin.html URL
-  var checkinUrl = "https://khoonpin-debug.github.io/Attendance-Test/checkin.html";
-  // var qrUrl = checkinUrl + "?id=" + encodeURIComponent(empid) + "&site=" + encodeURIComponent(siteid) + "&ts=" + timestamp;
-  var qrUrl = checkinUrl + "?id=" + empid + "&site=" + siteid + "&ts=" + timestamp;
-
-  document.getElementById("msg").innerHTML =
-  "Scan QR or open this link:<br><a href='"+qrUrl+"' target='_blank'>"+qrUrl+"</a>";
-  
-  // Generate the QR code
-  var qr = new QRious({
-    element: document.getElementById('qr'),
-    value: qrUrl,
-    size: 250
-  });
-
-  document.getElementById("msg").innerHTML = "Scan this QR code at the site to check in";
+if(site==""){
+alert("Please enter Factory Site ID");
+return;
 }
+
+var checkinUrl = "https://khoonpin-debug.github.io/Attendance-Test/checkin.html";
+
+var qrUrl = checkinUrl + "?site=" + site;
+
+new QRious({
+element: document.getElementById("qr"),
+value: qrUrl,
+size: 250
+});
+
+document.getElementById("link").innerHTML =
+"Factory QR Link:<br><a href='"+qrUrl+"' target='_blank'>"+qrUrl+"</a>";
+
+}
+
 </script>
 
 </body>
 </html>
+
 
 
 
