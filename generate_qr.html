@@ -39,8 +39,12 @@ function generateQR() {
 
   // Replace this with your GitHub Pages checkin.html URL
   var checkinUrl = "https://khoonpin-debug.github.io/Attendance-Test/checkin.html";
-  var qrUrl = checkinUrl + "?id=" + encodeURIComponent(empid) + "&site=" + encodeURIComponent(siteid) + "&ts=" + timestamp;
+  // var qrUrl = checkinUrl + "?id=" + encodeURIComponent(empid) + "&site=" + encodeURIComponent(siteid) + "&ts=" + timestamp;
+  var qrUrl = checkinUrl + "?id=" + empid + "&site=" + siteid + "&ts=" + timestamp;
 
+  document.getElementById("msg").innerHTML =
+  "Scan QR or open this link:<br><a href='"+qrUrl+"' target='_blank'>"+qrUrl+"</a>";
+  
   // Generate the QR code
   var qr = new QRious({
     element: document.getElementById('qr'),
@@ -54,5 +58,6 @@ function generateQR() {
 
 </body>
 </html>
+
 
 
